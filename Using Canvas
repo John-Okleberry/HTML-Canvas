@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<HTML>
+<Head>
+    
+</Head>
+  
+<Body>
+    
+<!-- It is essential, when working with canvas, to create an id for your canvas. This allows you to manipulate the canvas using Javascript code. An example of the most basic canvas creation is below. (The only unnecessary code is a border so that the canvas can be seen more clearly) -->
+
+<canvas id="myCanvas" width="400" height="400" style="border:1px solid #d3d3d3;">
+<!-- If a browser does not recognize an HTML tag, it will read this text-->
+Your browser does not support the HTML5 Canvas tag.
+</canvas>
+
+<!--Here comes the necessary Javascript. Most of the javascript drawing functions that I have tried haven't worked so I am limited to those provided in W3 schools' resources for now. Note that we must create a "drawing object" first which allows us to access properties inherent in HTML 5, see "ctx.fillStyle" and "ctx.fillRect"-->
+
+<script>
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+
+//Note that the color is in hexadecimal and must be preceded by a # sign, it is a CSS color. gradients and patterns are also fill options. We could have also used "red" as an option
+ctx.fillStyle = "#FF0000";
+ctx.fillRect(20, 20, 150, 150);
+
+
+/**************************************************************************
+ * Drawing a straight line
+ *
+ * There are several steps to this process, outlined as follows
+ * 1. Begin or reset the current path
+ * 2. Set the attributes of the line such as width and color
+ * 3. Set the starting coordinate of the line
+ * 4. Set the ending coordinate of the line
+ * 5. Draw the line (using the .stroke() function)
+**************************************************************************/
+ctx.beginPath();
+ctx.lineWidth="5";
+ctx.strokeStyle="green";
+ctx.moveTo(200,20);
+ctx.lineTo(300,120);
+ctx.stroke();
+
+
+/**********************************************************************
+ * Drawing a sphere and using gradients
+ *
+ * 1.Create a variable, using our 2D object, to specify where colors in
+ *   the gradient are present
+ * 2.Reset the Drawing Path (because we used it on the line already)
+ * 3.Specify where the colors blend using values 0 - 1 (2 stops minimum)
+ * 4.Draw the sphere
+ * 5.Fill the sphere using the variable that specifies our gradient
+ *
+ **********************************************************************/
+
+var grd = ctx.createRadialGradient(100, 300, 50, 180, 60, 200);
+
+ctx.beginPath();
+grd.addColorStop(0, "red");
+grd.addColorStop(0.5, "blue");
+grd.addColorStop(1, "white");
+
+ctx.arc(100, 300, 50, 0, 2*Math.PI)
+ctx.fillStyle = grd;
+ctx.fill();
+
+
+/****************************************************
+ * Recommended topics to expand:
+ *
+ * Filling a shape with a pattern
+ * Clearing a Canvas
+ * Using an image from the internet
+ * Capturing an image from the webcam
+ ***************************************************/
+
+
+</script>
+    
+    
+</Body>
+
+  
+</HTML>
