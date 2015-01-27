@@ -6,6 +6,8 @@
   
 <Body>
     
+    <-- Testing editing online in git hub-->
+    
 <!-- It is essential, when working with canvas, to create an id for your canvas. This allows you to manipulate the canvas using Javascript code. An example of the most basic canvas creation is below. (The only unnecessary code is a border so that the canvas can be seen more clearly) -->
 
 <canvas id="myCanvas" width="400" height="400" style="border:1px solid #d3d3d3;">
