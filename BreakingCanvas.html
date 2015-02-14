@@ -1,0 +1,253 @@
+<!DOCTYPE HTML>
+<HTML>
+<Head>
+
+</Head>
+
+<Body>
+
+<!-- You must create an ID for your canvas, otherwise you won't be able to manipulate it in Javascript -->
+
+<canvas id="myCanvas" width = "200" height="200" style="border:1px solid #d3d3d3;">
+<!-- This message will display if your canvas does not -->
+Your browser does not support the HTML5 Canvas tag.
+</canvas>
+
+<br>
+<!-- Some buttons to view multiple aspects of canvas -->
+<button type="button" name="drawLine" OnClick="drawLine(errorCode)"> Draw a Line </button> <br>
+<button type="button" name="drawRect" OnClick="drawRect(errorCode)"> Draw a Rectangle </button> <br>
+<button type="button" name="drawCircle" OnClick="drawCircle(errorCode)"> Draw a Circle </button> <br>
+<button type="button" name="fixCode" OnClick="fixDrawing()"> Fix the Code </button> <br>
+<button type="button" name="breakCode" OnClick="breakDrawing(shape)"> Break the Code </button> <br>
+
+
+<!-- Now we get into some Javascript -->
+<script>
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+
+// Tracking variables for the break code option
+var shape = "line";
+var errorCode = 0;
+ctx.save();            // To preserve the context before drawing takes place
+
+/**************************************************************************
+ * Drawing a straight line
+ *
+ * There are several steps to this process, outlined as follows
+ * 1. Begin or reset the current path
+ * 2. Set the attributes of the line such as width and color
+ * 3. Set the starting coordinate of the line
+ * 4. Set the ending coordinate of the line
+ * 5. Draw the line (using the .stroke() function)
+**************************************************************************/
+function drawLine(errorCode){
+
+clearCanvas();
+
+// To randomize the location of the line
+var x;  
+var y;  
+
+// To randomize the color of the rectangle
+
+var letters = '0123456789ABCDEF'.split('');
+var color = '#';
+for (var i = 0; i < 6; i++){
+	color += letters[Math.floor(Math.random() * 16)];
+}
+
+if (errorCode != 1) 							// Error Type 1
+	ctx.beginPath();
+ctx.lineWidth="5";  
+ctx.strokeStyle = color;
+var x = Math.floor((Math.random() * 200) + 1);
+var y = Math.floor((Math.random() * 200) + 1);
+ctx.moveTo(x,y);
+var x = Math.floor((Math.random() * 200) + 1);
+var y = Math.floor((Math.random() * 200) + 1);
+if (errorCode != 2) 							// Error Type 2
+	ctx.lineTo(x,y);
+if (errorCode != 3) 							// Error Type 3
+	ctx.stroke();
+
+shape = "line";
+
+}
+
+/**********************************************************************************************
+ * Note that the color is in hexadecimal and must be preceded by a # sign, it is a CSS color.
+ * Gradients and patterns are also fill options. We could have also used "red" as an option
+ **********************************************************************************************/
+function drawRect(errorCode){
+
+clearCanvas();
+
+// To randomize the location of the square
+var x;  
+var y;  
+
+var x = Math.floor((Math.random() * 100) + 1);
+var y = Math.floor((Math.random() * 100) + 1);
+
+// To randomize the color of the rectangle
+
+var letters = '0123456789ABCDEF'.split('');
+var color = '#';
+for (var i = 0; i < 6; i++){
+	color += letters[Math.floor(Math.random() * 16)];
+}
+
+if (errorCode !=1)					
+	ctx.fillStyle = color;
+if (errorCode == 1){				// First Error Type
+	ctx.restore();
+	ctx.save();
+}
+
+if (errorCode < 2)					
+	ctx.fillRect(x, y, x + 40, y + 40);
+else if (erroCode == 2)				// Second Error Type
+	ctx.fillRect(x, y, 0, 40);
+else
+	ctx.fillRect(20, 20, 0);		// Third Error Type
+
+shape = "rectangle";
+
+}
+
+/**********************************************************************
+ * Drawing a sphere and using gradients
+ *
+ * 1.Create a variable, using our 2D object, to specify where colors in
+ *   the gradient are present
+ * 2.Reset the Drawing Path
+ * 3.Specify where the colors blend using values 0 - 1 (2 stops minimum)
+ * 4.Draw the sphere
+ * 5.Fill the sphere using the variable that specifies our gradient
+ **********************************************************************/
+function drawCircle(errorCode){
+
+clearCanvas();
+
+// To randomize the location of the circle
+var x;  
+var y;  
+
+var x = Math.floor((Math.random() * 200) + 1);
+var y = Math.floor((Math.random() * 200) + 1);
+
+// To randomize the color of the circle
+
+var letters = '0123456789ABCDEF'.split('');
+var color = '#';
+for (var i = 0; i < 6; i++){
+	color += letters[Math.floor(Math.random() * 16)];
+}
+
+
+var grd = ctx.createRadialGradient(x - 20, y - 20, x, y, x + 20, y + 20);
+
+if (errorCode != 1)											// Code 1
+	ctx.beginPath();
+
+grd.addColorStop(0, "red");
+grd.addColorStop(0.5, "blue");
+grd.addColorStop(1, "white");
+
+
+ctx.arc(x, y, (x+y) / 4, 0, 2*Math.PI);
+if (errorCode < 2)												
+	ctx.fillStyle = color;
+else if (errorCode == 2)									// Code 2
+	ctx.fillStyle = grd;
+else
+	ctx.fillStyle = grd;									// Code 3 (placeholder)
+
+	
+ctx.fill();
+
+shape = "circle";
+grd.load();
+grd.save();
+
+}
+
+/******************************************************************************************************
+* A function to reset the canvas in preparation for a new shape
+*******************************************************************************************************/
+function clearCanvas(){
+
+ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+}
+
+/*******************************************************************************************************
+* A function that resets the error code and the canvas
+*******************************************************************************************************/
+function fixDrawing(shape){
+
+	clearCanvas();
+	errorCode = 0;
+}
+
+/*******************************************************************************************************
+* A function to generate an error code and then run the most recently drawn shape with an error
+*******************************************************************************************************/
+function breakDrawing(shape){
+
+	clearCanvas();
+
+	if (shape == "line"){
+		errorCode = Math.floor((Math.random() * 3) + 1);
+		if(errorCode == 1)
+			alert("This is what happens when you forget the 'beginPath' function!");
+		if(errorCode == 2)
+			alert("This is what happens when you forget to tell a line where to end!")
+		if(errorCode == 3)
+			alert("This is what happens when you forget to add the 'stroke' method!");
+
+		drawLine(errorCode);
+	}
+	else if
+	(shape == "rectangle"){
+		errorCode = Math.floor((Math.random() * 3) + 1);
+		if(errorCode == 1)
+			alert("This is what happens when you don't specify a fill color");
+		if(errorCode == 2)
+			alert("This is what happens when you set the width to '0'")
+		if(errorCode == 3)
+			alert("This is what happens when you don't set a value for the height");
+	
+		drawRect(errorCode);
+	}
+	else if
+	(shape == "circle"){
+		errorCode = Math.floor((Math.random() * 3) + 1);
+		if(errorCode == 1){
+			alert("This is what happens when you don't reset the drawing path each time: click 'Draw a Circle'");
+			}
+		if(errorCode == 2)
+			alert("This is what happens when your gradient doesn't know where to transition between colors");
+		if(errorCode == 3)
+			alert("This is what happens when you use a gradient. The gradient location is mismatched with the circle location when the circle is not completely visible")
+
+		drawCircle(errorCode);
+}
+}
+
+
+/**************************************************************************************
+* Expansion Plans:
+*
+* Draw Images
+**************************************************************************************/
+
+
+</script>
+
+
+</body>
+
+</HTML>
